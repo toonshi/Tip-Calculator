@@ -15,12 +15,11 @@
  */
 package com.example.tiptime
 
-import android.R.attr.checked
-import android.R.attr.singleLine
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,10 +32,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.input.InputTransformation.Companion.keyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -46,6 +49,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -53,11 +57,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tiptime.ui.theme.TipTimeTheme
 import java.text.NumberFormat
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Switch
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.verticalScroll
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,6 +107,7 @@ fun TipTimeLayout() {
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Next
             ),
+            leadingIcon = R.drawable.money,
             onValueChange = { amountInput = it },
             modifier = Modifier
                 .padding(bottom = 32.dp)
@@ -121,6 +121,7 @@ fun TipTimeLayout() {
                 imeAction = ImeAction.Done
             ),
             onValueChange = { tipInput  = it },
+            leadingIcon = R.drawable.money,
             modifier = Modifier
                 .padding(bottom = 32.dp)
                 .fillMaxWidth()
@@ -145,7 +146,7 @@ fun TipTimeLayout() {
  * Example would be "$10.00".
  */
 private fun calculateTip(amount: Double, tipPercent: Double = 15.0, roundUp: Boolean = false): String {
-    var tip = tipPercent / 100 * amount
+    val tip = tipPercent / 100 * amount
 
     if(roundUp) {
         kotlin.math.ceil(tip)
@@ -157,6 +158,7 @@ private fun calculateTip(amount: Double, tipPercent: Double = 15.0, roundUp: Boo
 @Composable
 fun EditNumberField(
     @StringRes label: Int,
+    @DrawableRes leadingIcon: Int,
     value: String,
     keyboardOptions: KeyboardOptions,
     onValueChange: (String) -> Unit,
@@ -168,6 +170,7 @@ fun EditNumberField(
         keyboardOptions = keyboardOptions
         ,
         value = value,
+        leadingIcon = { Icon(painterResource(id = leadingIcon), null)},
         onValueChange = onValueChange,
         modifier = modifier,
         singleLine = true
