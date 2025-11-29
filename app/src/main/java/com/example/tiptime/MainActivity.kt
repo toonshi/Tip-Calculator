@@ -121,7 +121,7 @@ fun TipTimeLayout() {
                 imeAction = ImeAction.Done
             ),
             onValueChange = { tipInput  = it },
-            leadingIcon = R.drawable.money,
+            leadingIcon = R.drawable.percent,
             modifier = Modifier
                 .padding(bottom = 32.dp)
                 .fillMaxWidth()
